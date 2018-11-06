@@ -54,19 +54,24 @@ int Machine::countResult(Task tasks[])
 
 void Machine::bruteforce()
 {
-	printTasks();
-	std::cout << result;
+	List.show();
+	std::cout << result<<std::endl;
 }
 
 void Machine::permute(int start, int size)
 {
 	if (start == size)
 	{
-		if (result > countResult(task))
+		if (result >= countResult(task))
 		{
+			if (result > countResult(task)) {
+				for (int i = List.size; i > 0; i--) { List.clear(result); }
+			}
 			result = countResult(task);
+			List.add(List.size, result, task);
+			bruteforce();
 			//printTasks();
-			//std::cout << std::endl << result;
+			//std::cout << result <<std::endl;
 		}
 	}
 	else

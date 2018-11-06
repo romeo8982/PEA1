@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Task.h"
+#include "DoubleList.h"
 #pragma once
 class Machine
 {
@@ -8,6 +9,7 @@ public:
 	int result;
 	int size;
 	Task *task;
+	DoubleList List;
 	Machine();
 	void setSize(int size);
 	void addTask(Task task,int id);
