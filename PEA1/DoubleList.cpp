@@ -117,10 +117,10 @@ void DoubleList::show()
 {
 	cout << endl << "-------------------------------" << endl;
 	Link *element = head;
+	cout << endl << element->key;
 	while (element)
 	{
-		cout << element->result<<endl;
-		cout << element->key;
+		cout << element->result->id<<endl;
 		element = element->next;
 	}
 }

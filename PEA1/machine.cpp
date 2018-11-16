@@ -1,14 +1,11 @@
 #include "stdafx.h"
 #include "Machine.h"
-#include <memory>
-#include <limits>
 
 
 void::Machine::setSize(int size)
 {
 	this->size = size;
 	task = new Task[size];
-	arrayOfResult = new int[size];
 }
 
 Machine::Machine()
@@ -52,26 +49,21 @@ int Machine::countResult(Task tasks[])
 	return result;
 }
 
-void Machine::bruteforce()
+void Machine::showResult()
 {
-	List.show();
-	std::cout << result<<std::endl;
+	printTasks();
+	std::cout << result <<std::endl;
 }
 
-void Machine::permute(int start, int size)
+void Machine::bruteforce(int start, int size)
 {
 	if (start == size)
 	{
+	//	if (result > countResult(task)) system("cls");
 		if (result >= countResult(task))
 		{
-			if (result > countResult(task)) {
-				for (int i = List.size; i > 0; i--) { List.clear(result); }
-			}
 			result = countResult(task);
-			List.add(List.size, result, task);
-			bruteforce();
-			//printTasks();
-			//std::cout << result <<std::endl;
+	//		showResult();
 		}
 	}
 	else
@@ -79,7 +71,7 @@ void Machine::permute(int start, int size)
 		for (int i = start; i < size; i++)
 		{
 			swap(start, i);
-			permute(start + 1, size);
+			bruteforce(start + 1, size);
 			swap(start, i);
 		}
 	}

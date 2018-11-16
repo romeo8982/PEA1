@@ -25,6 +25,6 @@ Task::~Task()
 
 std::ostream & operator<<(std::ostream & display, const Task & task)
 {
-	display << task.id << " " << task.executionTime << " " << task.retioPunishment << " " << task.deadLine<<std::endl;
+	display << task.id+1 << " " << task.executionTime << " " << task.retioPunishment << " " << task.deadLine<<std::endl;
 	return display;
 }

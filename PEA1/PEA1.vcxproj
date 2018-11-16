@@ -147,7 +147,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DoubleList.h" />
     <ClInclude Include="Initiator.h" />
     <ClInclude Include="machine.h" />
     <ClInclude Include="stdafx.h" />
@@ -155,7 +154,6 @@
     <ClInclude Include="Task.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DoubleList.cpp" />
     <ClCompile Include="Initiator.cpp" />
     <ClCompile Include="machine.cpp" />
     <ClCompile Include="PEA1.cpp" />

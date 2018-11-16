@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Initiator.h"
-#include <cctype>
 
 bool Initiator::is_number(const std::string & s)
 {

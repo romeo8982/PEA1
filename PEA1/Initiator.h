@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <fstream>
+#include <cctype>
 #include "Machine.h"
 #pragma once
 class Initiator
