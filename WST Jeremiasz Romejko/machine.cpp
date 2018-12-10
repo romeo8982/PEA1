@@ -19,8 +19,6 @@ void Machine::addTask(Task task, int position)
 	{
 		this->task[position].fillTask(task.id, task.executionTime, task.retioPunishment, task.deadLine);
 	}
-
-	optTaskList.push_back(task);
 }
 
 void Machine::printTasks()
@@ -55,8 +53,6 @@ void Machine::showResult()
 {
 	printTasks();
 	std::cout << result <<std::endl;
-	Result _result(optTaskList, result);
-	std::cout << _result.result << _result.track;
 }
 
 void Machine::bruteforce(int start, int size)
@@ -87,38 +83,6 @@ void Machine::swap(int firstPosition, int secondPosition)
 	helper.fillTask(task[firstPosition].id,task[firstPosition].executionTime, task[firstPosition].retioPunishment, task[firstPosition].deadLine);
 	task[firstPosition].fillTask(task[secondPosition].id, task[secondPosition].executionTime, task[secondPosition].retioPunishment, task[secondPosition].deadLine);
 	task[secondPosition].fillTask(helper.id, helper.executionTime, helper.retioPunishment, helper.deadLine);
-}
-
-void Machine::simulatedAnnealing()
-{
-	int nextTaskID;
-	temperature = std::numeric_limits<int>::max();
-	int taskId = rand() % 10;
-	optTaskList.push_back(task[taskId]);
-	do
-	{
-		do
-		{
-			nextTaskID = rand() % 10;
-		} while (nextTaskID != taskId);
-
-
-
-
-
-
-
-
-
-
-
-	} while (true);
-}
-
-double Machine::pmove(Task first, Task second, double temperature)
-{
-
-	return 0.0;
 }
 
 Machine::~Machine()
