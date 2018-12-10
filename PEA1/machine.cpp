@@ -55,8 +55,8 @@ void Machine::showResult()
 {
 	printTasks();
 	std::cout << result <<std::endl;
-	Result _result(optTaskList, result);
-	std::cout << _result.result << _result.track;
+	//Result _result(optTaskList, result);
+	//std::cout << _result.result << _result.track;
 }
 
 void Machine::bruteforce(int start, int size)
@@ -64,11 +64,11 @@ void Machine::bruteforce(int start, int size)
 	if (start == size)
 	{
 		if (result > countResult(task)) system("cls");
-		if (result >= countResult(task))
-		{
-			result = countResult(task);
-			showResult();
-		}
+		//if (result >= countResult(task))
+		//{
+		//	result = countResult(task);
+		//	showResult();
+		//}
 	}
 	else
 	{
@@ -103,21 +103,62 @@ void Machine::simulatedAnnealing()
 		} while (nextTaskID != taskId);
 
 
-
-
-
-
-
-
-
-
-
 	} while (true);
 }
+void Machine::simulatedAnnealing(int start, int size, double temperature)
+{   
+
+	bool flaga = true;
+	if (start == size)
+	{
+		//if (result  countResult(task)) system("cls");
+		/*if (result >= countResult(task))
+		{
+			result = countResult(task);
+			showResult();
+			flaga = false;
+		}*/
+		//else
+		//{
+			if (probability(result, countResult(task), temperature))
+			{
+				result = countResult(task);
+				showResult();
+			}
+			flaga = true;
+		//}
+	}
+	else
+	{
+		for (int i = start; i < size; i++)
+		{
+			swap(start, i);
+			if (temperature>0.0)
+			{
+				if (flaga)
+					simulatedAnnealing(start + 1, size, temperature - 0.001);
+				else
+					simulatedAnnealing(start + 1, size, temperature);
+			}
+			swap(start, i);
+		}
+	}
+}
+
+bool Machine::probability(int optResult, int result, double temperature)
+{
+	double P;
+	deltaL = optResult - result;
+	P = exp(-1 * deltaL / temperature);
+	std::bernoulli_distribution random_bool_generator(P);
+	
+	return random_bool_generator(rand_engine);
+}
+
+
 
 double Machine::pmove(Task first, Task second, double temperature)
 {
-
 	return 0.0;
 }
 
