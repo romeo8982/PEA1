@@ -6,6 +6,7 @@
 #include <time.h>
 #include "Result.h"
 #include <random>
+#include <algorithm>  
 #pragma once
 class Machine
 {
@@ -13,6 +14,7 @@ class Machine
 	int deltaL;
 	double temperature;
 	bool probability(int optResult,int result,double temperature);
+	int counter;
 public:
 	int result;
 	
@@ -29,7 +31,7 @@ public:
 	void bruteforce(int start, int size);
 	void swap(int first, int second);
 	void simulatedAnnealing();
-	void simulatedAnnealing(int start, int size, double temperature);
-	double pmove(Task first, Task second, double temperature);
+	int simulatedAnnealing(int start, int size);
+	void nextPermutation(std::list<Task> taskList);
 	~Machine();
 };
