@@ -18,7 +18,7 @@ Initiator::Initiator(std::string name, Machine &machine)
 	{
 		std::string word;
 		while (file >> word)
-		{			
+		{
 			if (is_number(word))
 			{
 				if (i == 1)
@@ -34,7 +34,7 @@ Initiator::Initiator(std::string name, Machine &machine)
 					int deadLine = std::stoi(word);
 					Task task;
 					task.fillTask(idCounter, executionTime, retioPunishment, deadLine);
-					machine.addTask(task,idCounter);
+					machine.addTask(task, idCounter);
 					idCounter++;
 				}
 			}
@@ -43,7 +43,6 @@ Initiator::Initiator(std::string name, Machine &machine)
 	}
 	file.close();
 }
-
 Initiator::~Initiator()
 {
 }
