@@ -86,11 +86,11 @@ void Machine::bruteforce(int start, int size)
 {
 	if (start == size)
 	{
-		if (result > countResult(task)) system("cls");
+		//if (result > countResult(task)) system("cls");
 		if (result >= countResult(task))
 		{
 			result = countResult(task);
-			showResult();
+			//showResult();
 		}
 	}
 	else
