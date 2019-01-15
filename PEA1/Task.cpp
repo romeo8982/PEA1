@@ -17,6 +17,7 @@ void::Task::fillTask(int id,int executionTime, int retioPunishment, int deadLine
 		this->deadLine = deadLine;
 		this->id = id;
 	}
+	empty = false;
 }
 
 Task::~Task()

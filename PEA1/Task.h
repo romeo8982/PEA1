@@ -3,7 +3,9 @@
 
 class Task
 {
+	
 public:
+	bool empty = true;
 	int executionTime;
 	int retioPunishment;
 	int deadLine;
