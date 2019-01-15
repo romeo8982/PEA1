@@ -17,9 +17,10 @@ class Machine
 	double decrease;
 	bool probability(int optResult,int result,double temperature);
 	int counter;
+	int numberOfPopulation;
+	std::vector<std::vector<Task>> populationList;
 public:
 	int result;
-	
 	int size;
 	Task *task;
 	std::vector<Task> taskList;
@@ -35,7 +36,9 @@ public:
 	void bruteforce(int start, int size);
 	void swap(int first, int second);
 	void simulatedAnnealingRand();
+	std::vector<Task> generateNextPopulation();
 	int simulatedAnnealing(int start, int size);
-	void nextPermutation(std::vector<Task> taskList);
+	void savePopulation(int position, std::vector<Task> optTaskList);
+	std::vector<Task> FindTheBest();
 	~Machine();
 };

@@ -10,6 +10,8 @@ void::Machine::setSize(int size)
 	temperature = 25.0;
 	decrease = temperature / ((size*(size - 1)) / 2);
 	std::srand(unsigned(std::time(0)));
+	numberOfPopulation = 50;
+
 }
 
 Machine::Machine()
@@ -60,21 +62,6 @@ void Machine::showResultVector()
 	
 }
 
-int Machine::countResultVector(std::vector<Task> taskList)
-{
-	int result = 0;
-	int time = 0;
-	for (int i = 0; i < this->size; i++)
-	{
-		if (taskList[i].deadLine - taskList[i].executionTime - time < 0)
-		{
-			result += (taskList[i].deadLine - taskList[i].executionTime - time)*-1 * taskList[i].retioPunishment;
-		}
-
-		time += taskList[i].executionTime;
-	}
-	return result;
-}
 
 void Machine::showResult()
 {
@@ -86,11 +73,9 @@ void Machine::bruteforce(int start, int size)
 {
 	if (start == size)
 	{
-		//if (result > countResult(task)) system("cls");
 		if (result >= countResult(task))
 		{
 			result = countResult(task);
-			//showResult();
 		}
 	}
 	else
@@ -114,8 +99,6 @@ void Machine::swap(int firstPosition, int secondPosition)
 
 void Machine::simulatedAnnealingRand()
 {
-	//std::cout << counter << std::endl;
-	//std::cout << temperature << std::endl;
 	int helper;
 	int counter = 0;
 
@@ -127,12 +110,10 @@ void Machine::simulatedAnnealingRand()
 		{
 			counter = 0;
 			result = helper;
-			//showResultVector();
 		}
 		else if (probability(result, helper, temperature))
 		{
 			result = helper;
-			//showResultVector();
 			counter++;
 
 		}
@@ -150,11 +131,9 @@ void Machine::simulatedAnnealingRand()
 	showResultVector();
 }
 
+
 int Machine::simulatedAnnealing(int start, int size)
 {
-//std::cout << counter<<std::endl;
-//std::cout << temperature << std::endl;
-	
 	if (start == size)
 	{
 		if (result > countResult(task)) system("cls");
@@ -202,11 +181,6 @@ int Machine::simulatedAnnealing(int start, int size)
 	}
 }
 
-void Machine::nextPermutation(std::vector<Task> taskList)
-{
-}
-
-
 bool Machine::probability(int optResult, int result, double temperature)
 {
 	double P;
@@ -222,6 +196,48 @@ bool Machine::probability(int optResult, int result, double temperature)
 }
 
 
+std::vector<Task> Machine::generateNextPopulation()
+{
+	std::random_shuffle(optTaskList.begin(), optTaskList.end());
+	return optTaskList;
+}
+
+void Machine::savePopulation(int position,std::vector<Task> optTaskList)
+{
+	populationList.insert(populationList.begin()+position,optTaskList);
+}
+
+int Machine::countResultVector(std::vector<Task> taskList)
+{
+	int result = 0;
+	int time = 0;
+	for (int i = 0; i < this->size; i++)
+	{
+		if (taskList[i].deadLine - taskList[i].executionTime - time < 0)
+		{
+			result += (taskList[i].deadLine - taskList[i].executionTime - time)*-1 * taskList[i].retioPunishment;
+		}
+
+		time += taskList[i].executionTime;
+	}
+	return result;
+}
+
+std::vector<Task> Machine::FindTheBest()
+{
+	std::vector<Task> localTaskResult;
+	int localResult;
+	for (int i = 0; i < size; i++)
+	{
+		localResult=countResultVector(populationList[i]);
+		if (result>=localResult)
+		{
+			result = localResult;
+			localTaskResult = populationList[i];
+		}
+	}
+	return localTaskResult;
+}
 
 Machine::~Machine()
 {
