@@ -6,7 +6,8 @@
 #include <time.h>
 #include "Result.h"
 #include <random>
-#include <algorithm>  
+#include <algorithm> 
+#include <vector>
 #include <ctime>
 #pragma once
 class Machine
@@ -42,14 +43,15 @@ public:
 	void swap(int firstPosition, int secondPosition, Task * task);
 	void simulatedAnnealingRand();
 	std::vector<Task> generateNextPopulation();
-	void savePopulation(int position, std::vector<Task> optTaskList, std::vector<std::vector<Task>> PopulationList);
+	void savePopulation(int position, std::vector<Task> optTaskList, std::vector<std::vector<Task>> &PopulationList);
 	int simulatedAnnealing(int start, int size);
 	void setup();
 	std::vector<std::vector<Task>> GeneticAlgoritm(std::vector<std::vector<Task>> pop);
 	std::vector<Task> TurnamentSelection(std::vector<std::vector<Task>> pop);
-	void mutate(std::vector<Task> task);
-	void swapVector(int firstPosition, int secondPosition, std::vector<Task> task);
+	void mutate(std::vector<Task> &task);
+	void swapVector(int firstPosition, int secondPosition, std::vector<Task>& task);
 	std::vector<Task> crossover(std::vector<Task> parent1, std::vector<Task> parent2);
 	void ShowMustGoOn();
+	bool contain(std::vector<Task> child, Task task);
 	~Machine();
 };

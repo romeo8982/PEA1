@@ -5,7 +5,7 @@ class Task
 {
 	
 public:
-	bool empty = true;
+	bool empty;
 	int executionTime;
 	int retioPunishment;
 	int deadLine;
@@ -13,5 +13,5 @@ public:
 	Task();
 	void fillTask(int id,int executionTime,int retioPunishment,int deadLine);
 	friend std::ostream& operator<<(std::ostream& display, const Task& task);
-	~Task();
+	friend bool operator==(const Task & lhs, const Task & rhs);
 };

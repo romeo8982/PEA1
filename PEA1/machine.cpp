@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Machine.h"
-#include <algorithm>
 
 
 void::Machine::setSize(int size)
@@ -64,7 +63,6 @@ void Machine::showResultVector()
 		std::cout << ' ' << *it;
 	std::cout << result;
 	std::cout << std::endl;
-	
 }
 
 void Machine::showResult()
@@ -183,6 +181,7 @@ int Machine::simulatedAnnealing(int start, int size)
 			}
 		}
 	}
+	return 0;//delete warrning
 }
 
 bool Machine::probability(int optResult, int result, double temperature)
@@ -206,9 +205,9 @@ std::vector<Task> Machine::generateNextPopulation()
 	return optTaskList;
 }
 
-void Machine::savePopulation(int position,std::vector<Task> optTaskList, std::vector<std::vector<Task>> PopulationList)
+void Machine::savePopulation(int position,std::vector<Task> optTaskListk,std::vector<std::vector<Task>> &Population)
 {
-	PopulationList.insert(populationList.begin()+position,optTaskList);
+	Population.insert(Population.begin()+position,optTaskListk);
 }
 
 int Machine::countResultVector(std::vector<Task> taskList)
@@ -229,14 +228,21 @@ int Machine::countResultVector(std::vector<Task> taskList)
 
 std::vector<Task> Machine::FindTheBest(std::vector<std::vector<Task>> pop)
 {
-	std::vector<Task> localTaskResult;
-	int localResult;
+	std::vector<Task> localTaskResult=pop[0];
+	int localResult = std::numeric_limits<int>::max();
+	int helper = std::numeric_limits<int>::max();
 	for (int i = 0; i < pop.size(); i++)
 	{
-		localResult=countResultVector(pop[i]);
-		if (result>=localResult)
+		helper = countResultVector(pop[i]);
+		if (result>=helper)
 		{
+			localResult = helper;
 			result = localResult;
+			localTaskResult = pop[i];
+		}
+		else if (localResult>=helper)
+		{ 
+			localResult = helper;
 			localTaskResult = pop[i];
 		}
 	}
@@ -245,11 +251,13 @@ std::vector<Task> Machine::FindTheBest(std::vector<std::vector<Task>> pop)
 
 void Machine::setup()
 {
+	std::vector<Task> helper;
 	for (int i = 0; i < numberOfPopulation; i++)
 	{
-		savePopulation(i, generateNextPopulation(),populationList);
+		helper = generateNextPopulation();
+		savePopulation(i, helper,populationList);
 	}
-	optTaskList = FindTheBest(populationList);
+	//optTaskList = FindTheBest(populationList);
 }
 
 
@@ -257,25 +265,20 @@ void Machine::setup()
 std::vector<std::vector<Task>> Machine::GeneticAlgoritm(std::vector<std::vector<Task>> pop)
 {
 	std::vector<std::vector<Task>> localPopulationList;
-	
-	int helper = 0;
-	if (theBest)
-	{
-		savePopulation(0,FindTheBest(pop), localPopulationList);
-		helper = 1;
-	}
+	savePopulation(0,FindTheBest(pop), localPopulationList);
 
-	for (int i = helper; i < localPopulationList.size(); i++)
+
+	for (int i = 1; i < pop.size(); i++)
 	{
 		std::vector<Task> parent1 = TurnamentSelection(pop);
 		std::vector<Task> parent2 = TurnamentSelection(pop);
-		// Crossover parents
+
 		std::vector<Task> child = crossover(parent1, parent2);
-		// Add child to new population
+
 		savePopulation(i, child, localPopulationList);
 	}
 
-	for (int i = helper; i < localPopulationList.size(); i++) {
+	for (int i = 1; i < localPopulationList.size(); i++) {
 		mutate(localPopulationList[i]);
 	}
 
@@ -287,23 +290,23 @@ std::vector<Task> Machine::TurnamentSelection(std::vector<std::vector<Task>> pop
 {
 	std::vector<std::vector<Task>> turnament;
 	for (int i = 0; i < turnamentSize; i++) {
-		int randomId = (int)(rand()%1 * populationList.size());
+		int randomId = rand() % populationList.size();
 		savePopulation(i, pop[randomId],turnament);
 	}
 	return FindTheBest(turnament);
 }
-void Machine::mutate(std::vector<Task> task)
+void Machine::mutate(std::vector<Task> &task)
 {
 	std::bernoulli_distribution random_bool_generator(mutationRate);
 	for (int firstPosition = 0; firstPosition < task.size(); firstPosition++) {
 		if (random_bool_generator(rand_engine))
 		{
-			int secondPosition = (int)(task.size() * rand());
+			int secondPosition = rand() % task.size();
 			swapVector(firstPosition, secondPosition, task);
 		}
 	}
 }
-void Machine::swapVector(int firstPosition, int secondPosition, std::vector<Task> task)
+void Machine::swapVector(int firstPosition, int secondPosition, std::vector<Task> &task)
 {
 	Task helper;
 	helper.fillTask(task[firstPosition].id, task[firstPosition].executionTime, task[firstPosition].retioPunishment, task[firstPosition].deadLine);
@@ -312,49 +315,54 @@ void Machine::swapVector(int firstPosition, int secondPosition, std::vector<Task
 }
 
 std::vector<Task> Machine::crossover(std::vector<Task> parent1, std::vector<Task> parent2) {
-	std::vector<Task> child;
-	int startPos = (int)(rand()%1 * parent1.size());
-	int endPos = (int)(rand()%1 * parent1.size());
 
-	for (int i = 0; i < child.size(); i++) {
-		if (startPos < endPos && i > startPos && i < endPos) {
+	std::vector<Task> child;
+	Task *helperTask = new Task[size];
+	for (int i = 0; i < size; i++)
+	{
+		child.push_back(helperTask[i]);
+	}
+	
+	int startPos = rand() % parent1.size();
+	int endPos = rand() %  parent1.size();
+
+	for (int i = 0; i < size; i++) {
+		if ( i >= startPos && i <= endPos) {
 			child[i] = parent1[i];
 		}
-		else if (startPos > endPos) {
-			if (!(i < startPos && i > endPos)) {
-				child[i] = parent1[i];
+	}
+	for (int i = 0; i < size; i++) {
+		if (!contain(child,parent2[i])) {
+			for (int j = 0; j < size; j++) {
+					if (child[j].empty) {
+						child[j] = parent2[i];
+						break;
+					}
 			}
 		}
 	}
-
-	for (int i = 0; i < parent2.size(); i++) {
-
-		if (std::find(child.begin(), child.end(), parent2[i]) == child.end()) {
-
-			for (int ii = 0; ii < child.size(); ii++) {
-				if (child[ii].empty) {
-					child[ii] = parent2[i];
-					break;
-				}
-			}
-		}
-	}
+	delete[] helperTask;
 	return child;
 }
 
 void Machine::ShowMustGoOn()
 {
 	setup();
-	populationList = GeneticAlgoritm(populationList);
 	for (int i = 0; i < 100; i++) {
 		populationList = GeneticAlgoritm(populationList);
 	}
 	
-	for (std::vector<Task>::iterator it = FindTheBest(populationList).begin(); it != FindTheBest(populationList).end(); ++it)
-		std::cout << ' ' << *it;
-	std::cout << result;
-	std::cout << std::endl;
+	optTaskList = FindTheBest(populationList);
+	showResultVector();
 }
+
+bool Machine::contain(std::vector<Task> child, Task task)
+{ 
+	bool contain = false;
+	contain = std::find(child.begin(), child.end(), task) != child.end();
+	return contain;
+}
+
 
 Machine::~Machine()
 {
