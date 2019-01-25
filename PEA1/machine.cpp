@@ -10,17 +10,19 @@ void::Machine::setSize(int size)
 	temperature = 25.0;
 	decrease = temperature / ((size*(size - 1)) / 2);
 	std::srand(unsigned(std::time(0)));
-
-	numberOfPopulation = 50;
-	mutationRate = 0.015;
-	turnamentSize = 5;
-	theBest=true;
-
 }
 
 Machine::Machine()
 {
 	result = std::numeric_limits<int>::max();
+}
+
+void Machine::setGA(int turnamentSize, int numbeOfPopulation, double mutationRate, int numberOfCycle)
+{
+	this->turnamentSize = turnamentSize;
+	this->numberOfPopulation = numbeOfPopulation;
+	this->mutationRate = mutationRate;
+	this->numberOfCycle = numberOfCycle;
 }
 
 void Machine::addTask(Task task, int position)
@@ -257,10 +259,7 @@ void Machine::setup()
 		helper = generateNextPopulation();
 		savePopulation(i, helper,populationList);
 	}
-	//optTaskList = FindTheBest(populationList);
 }
-
-
 
 std::vector<std::vector<Task>> Machine::GeneticAlgoritm(std::vector<std::vector<Task>> pop)
 {
@@ -281,7 +280,6 @@ std::vector<std::vector<Task>> Machine::GeneticAlgoritm(std::vector<std::vector<
 	for (int i = 1; i < localPopulationList.size(); i++) {
 		mutate(localPopulationList[i]);
 	}
-
 	return localPopulationList;
 }
 
@@ -306,6 +304,14 @@ void Machine::mutate(std::vector<Task> &task)
 		}
 	}
 }
+
+bool Machine::contain(std::vector<Task> child, Task task)
+{
+	bool contain = false;
+	contain = std::find(child.begin(), child.end(), task) != child.end();
+	return contain;
+}
+
 void Machine::swapVector(int firstPosition, int secondPosition, std::vector<Task> &task)
 {
 	Task helper;
@@ -348,19 +354,11 @@ std::vector<Task> Machine::crossover(std::vector<Task> parent1, std::vector<Task
 void Machine::ShowMustGoOn()
 {
 	setup();
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < numberOfCycle; i++) {
 		populationList = GeneticAlgoritm(populationList);
 	}
-	
 	optTaskList = FindTheBest(populationList);
 	showResultVector();
-}
-
-bool Machine::contain(std::vector<Task> child, Task task)
-{ 
-	bool contain = false;
-	contain = std::find(child.begin(), child.end(), task) != child.end();
-	return contain;
 }
 
 

@@ -20,9 +20,9 @@ class Machine
 	int counter;
 
 	int numberOfPopulation;
-	double mutationRate = 0.015;
-	int turnamentSize = 5;
-	bool theBest;
+	double mutationRate;
+	int turnamentSize;
+	int numberOfCycle;
 	std::vector<std::vector<Task>> populationList;
 public:
 	int result;
@@ -31,6 +31,7 @@ public:
 	std::vector<Task> taskList;
 	std::vector<Task> optTaskList;
 	Machine();
+	void setGA(int TurnamentSize, int numbeOfPopulation, double mutationRate, int numberOfCycle);
 	void setSize(int size);
 	void addTask(Task task,int id);
 	void printTasks();
